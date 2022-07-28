@@ -38,7 +38,7 @@ cli_args = {'all': False,
 
 
 def test_banner():
-    core.banner(version.__version__)
+    print(core.banner(version.__version__))
 
 no_args = deepcopy(cli_args)
 no_args['target'] = None
