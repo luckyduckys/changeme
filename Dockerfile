@@ -1,8 +1,10 @@
 FROM alpine:latest
-MAINTAINER Zach Grace (@ztgrace)
 
 RUN mkdir /changeme
 COPY . /changeme/
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 RUN apk update \
     && apk add --no-cache --virtual .changeme-deps \
