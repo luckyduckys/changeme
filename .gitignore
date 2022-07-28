@@ -3,3 +3,5 @@
 *.pyc
 .coverage
 data.db
+venv2/
+venv3/
