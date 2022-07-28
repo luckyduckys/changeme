@@ -455,6 +455,8 @@ def remove_queues():
 
 
 def check_version():
+    #Ignore for now
+    return
     logger = logging.getLogger('changeme')
 
     try:
