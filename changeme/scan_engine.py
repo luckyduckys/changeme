@@ -18,12 +18,7 @@ from .scanners.telnet import Telnet
 from .scanners.http_fingerprint import HttpFingerprint
 from .target import Target
 import time
-try:
-    # Python 2
-    from Queue import Queue
-except:
-    # Python 3
-    from queue import Queue
+from queue import Queue
 
 
 class ScanEngine(object):
@@ -200,7 +195,7 @@ class ScanEngine(object):
 
         for target in self.targets:
             for cred in self.creds:
-                for proto, classname in scanner_map.items():
+                for proto, classname in list(scanner_map.items()):
                     if cred['protocol'] == proto and (proto in self.config.protocols or self.config.all):
                         t = Target(host=target.host, port=target.port, protocol=proto)
                         fingerprints.append(globals()[classname](cred, t, self.config, '', ''))
@@ -216,7 +211,7 @@ class ScanEngine(object):
         self.logger.info("Dry run targets:")
         while self.fingerprints.qsize() > 0:
             fp = self.fingerprints.get()
-            print(fp.target)
+            print((fp.target))
         quit()
 
     def _get_queue(self, name):

@@ -419,9 +419,9 @@ def prompt_for_resume(config):
         prompt = '(R/F)> '
         answer = ''
         try:
-            answer = raw_input(prompt)
-        except NameError:
             answer = input(prompt)
+        except NameError:
+            answer = eval(input(prompt))
 
         if answer.upper() == 'F':
             logger.debug("Forcing a fresh scan")
