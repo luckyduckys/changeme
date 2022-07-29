@@ -16,5 +16,7 @@ RUN mkdir /changeme
 COPY . /changeme
 COPY --from=base /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
+RUN find /opt -type f -a -name '*.pyc' -o -name '*.pyo' -exec rm '{}' \; \
+    && find /changeme -type f -a -name '*.pyc' -o -name '*.pyo' -exec rm '{}' \;
 WORKDIR /changeme
 ENTRYPOINT ["./changeme.py"]
