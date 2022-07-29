@@ -1,35 +1,20 @@
-FROM alpine:latest
-
-RUN mkdir /changeme
-COPY . /changeme/
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+FROM alpine:latest as base
 
 RUN apk update \
-    && apk add --no-cache --virtual .changeme-deps \
-        bash \
-        libxml2 \
-        py-lxml \
-        py-pip \
-    && apk add --no-cache --virtual .build-deps \
-        ca-certificates \
-        gcc \
-        g++ \
-	    libffi-dev \
-        libtool \
-        libxml2-dev \
-        make \
-	    musl-dev \
-        postgresql-dev \
-        python-dev \
-        unixodbc-dev \
-    && pip install -r /changeme/requirements.txt \
-    && apk del .build-deps \
-    && find /usr/ -type f -a -name '*.pyc' -o -name '*.pyo' -exec rm '{}' \; \
-    && ln -s /changeme/changeme.py /usr/local/bin/
+    && apk add unixodbc-dev libpq-dev gcc g++ py3-pip python3-dev python3 \
+    && python3 -m venv /opt/venv
 
-ENV HOME /changeme
-ENV PS1 "\033[00;34mchangeme>\033[0m "
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+FROM alpine:latest
+RUN apk update \
+    && apk add python3
+RUN mkdir /changeme
+COPY . /changeme
+COPY --from=base /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 WORKDIR /changeme
 ENTRYPOINT ["./changeme.py"]
