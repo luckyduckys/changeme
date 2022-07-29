@@ -5,13 +5,7 @@ from .scanner import Scanner
 import re
 from selenium import webdriver
 from time import sleep
-try:
-    # Python 3
-    from urllib.parse import urlencode, urlparse
-except ImportError:
-    # Python 2
-    from urllib import urlencode
-    from urlparse import urlparse
+from urllib.parse import urlencode, urlparse
 
 HEADERS_USERAGENTS = [
     'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.3) Gecko/20090913 Firefox/3.5.3',
@@ -208,7 +202,7 @@ class HTTPGetScanner(Scanner):
         self.logger.debug("Screenshotting %s" % self.target)
         # Set up the selenium webdriver
         # This feels like it will have threading issues
-        for key, value in self.response.request.headers.items():
+        for key, value in list(self.response.request.headers.items()):
             capability_key = 'phantomjs.page.customHeaders.{}'.format(key)
             webdriver.DesiredCapabilities.PHANTOMJS[capability_key] = value
 
@@ -225,7 +219,7 @@ class HTTPGetScanner(Scanner):
         driver.set_page_load_timeout(int(self.config.timeout) - 0.1)
         driver.set_window_position(0, 0)
         driver.set_window_size(850, 637.5)
-        for cookie in self.response.request._cookies.items():
+        for cookie in list(self.response.request._cookies.items()):
             self.logger.debug("Adding cookie: %s:%s" % cookie)
             driver.add_cookie({'name': cookie[0],
                                'value': cookie[1],

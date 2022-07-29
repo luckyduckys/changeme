@@ -2,12 +2,7 @@
 
 import changeme.core
 import os
-try:
-    # Python 3
-    from urllib.parse import unquote_plus
-except ImportError:
-    # Python 2
-    from urllib import unquote_plus
+from urllib.parse import unquote_plus
 import yaml
 
 cli_prompt = input
@@ -291,7 +286,7 @@ def mkcred():
 
     print()
     fname = parameters['name'].lower().replace(' ', '_').replace('/', '_') + '.yml'
-    print('Writing config to %s' % fname)
+    print(('Writing config to %s' % fname))
 
     cdir = os.path.join('creds', parameters['protocol'], parameters['category'])
     if not os.path.isdir(cdir):
@@ -300,6 +295,6 @@ def mkcred():
     with open(os.path.join(cdir, fname), 'w') as fout:
         fout.write(yaml.dump(parameters, default_flow_style=False))
 
-    print(yaml.dump(parameters, default_flow_style=False))
+    print((yaml.dump(parameters, default_flow_style=False)))
 
     changeme.core.validate_cred(parameters, fname, parameters['category'])

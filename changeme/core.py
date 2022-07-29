@@ -312,7 +312,7 @@ def parse_yaml(f):
     with open(f, 'r') as fin:
         raw = fin.read()
         try:
-            parsed = yaml.safe_load(raw, Loader=yaml.FullLoader)
+            parsed = yaml.load(raw, Loader=yaml.FullLoader)
         except Exception as e:
             logger.error("[parse_yaml] %s is not a valid yaml file" % f)
             return None
@@ -419,9 +419,9 @@ def prompt_for_resume(config):
         prompt = '(R/F)> '
         answer = ''
         try:
-            answer = raw_input(prompt)
-        except NameError:
             answer = input(prompt)
+        except NameError:
+            answer = eval(input(prompt))
 
         if answer.upper() == 'F':
             logger.debug("Forcing a fresh scan")
@@ -455,6 +455,8 @@ def remove_queues():
 
 
 def check_version():
+    #Ignore for now
+    return
     logger = logging.getLogger('changeme')
 
     try:

@@ -2,4 +2,4 @@ coverage
 mock
 mock-ssh-server
 nose
-responses==0.7.0
+responses
